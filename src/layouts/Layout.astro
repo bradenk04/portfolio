@@ -6,19 +6,26 @@ import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
+import BaseHead from '@/components/BaseHead.astro';
+
+const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Braden Kennedy',
+    url: 'https://bradenkennedy.com',
+    jobTitle: 'Backend & Systems Engineer',
+    alumniOf: 'Eastern Washington University',
+    sameAs: ['https://github.com/bradenk04'],
+};
 ---
 
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <title>Astro</title>
         <slot name="head" />
+        <BaseHead />
     </head>
     <body>
         <slot />
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     </body>
 </html>
