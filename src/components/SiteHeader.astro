@@ -1,0 +1,56 @@
+---
+type Props = {
+    nameHref: string;
+    links: {
+        href: string;
+        label: string;
+    }[];
+    mobileLinks: {
+        href: string;
+        label: string;
+    }[];
+};
+
+const { nameHref, links, mobileLinks } = Astro.props;
+---
+
+<header class="sticky top-0 z-30 backdrop-blur-md">
+    <div
+        class="border-b"
+        style="
+            background: linear-gradient(to bottom, color-mix(in oklch, var(--background) 85%, transparent), color-mix(in oklch, var(--background) 55%, transparent));
+            border-color: color-mix(in oklch, var(--border) 60%, transparent);
+        "
+    >
+        <div class="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+            <a
+                href={nameHref}
+                class="text-muted-foreground hover:text-foreground font-mono text-xs tracking-[0.22em] uppercase transition-colors"
+            >
+                Braden Kennedy
+            </a>
+            <nav aria-label="Primary">
+                <ul class="text-muted-foreground flex items-center gap-5 text-sm">
+                    {
+                        links.map((link) => (
+                            <li key={link.href} class="hidden sm:block">
+                                <a href={link.href} class="link-underline">
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))
+                    }
+                    {
+                        mobileLinks.map((link) => (
+                            <li key={link.href} class="sm:hidden">
+                                <a href={link.href} class="link-underline">
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>

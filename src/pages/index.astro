@@ -1,16 +1,29 @@
 ---
 import '@/styles/starwind.css';
 import Layout from '@/layouts/Layout.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
+import LatticeBackground from '@/components/solid/LatticeBackground.tsx';
 
 const year = new Date().getFullYear();
 ---
 
 <Layout>
-    <main class="mx-auto max-w-3xl px-6"></main>
+    <LatticeBackground client:load />
+    <SiteHeader
+        nameHref="#top"
+        links={[
+            { href: '#now', label: 'Now' },
+            { href: '#about', label: 'About' },
+            { href: '#projects', label: 'Projects' },
+            { href: '#contact', label: 'Contact' },
+        ]}
+        mobileLinks={[{ href: '#contact', label: 'Contact' }]}
+    />
+    <main class="mx-auto min-h-screen max-w-3xl px-6"></main>
     <footer class="mx-auto max-w-3xl px-6 py-10">
         <div
             class="text-muted-foreground flex flex-col items-start justify-between gap-2 border-t pt-6 text-xs sm:flex-row sm:items-center"
-            style="border-color: hsl(var(--border) / 0.6);"
+            style="border-color: color-mix(in oklch, var(--border) 60%, transparent);"
         >
             <span class="font-mono">© {year} Braden Kennedy</span>
             <span class="font-mono">bradenkennedy.com</span>
