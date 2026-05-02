@@ -1,43 +1,88 @@
-# Astro Starter Kit: Minimal
+# bradenkennedy.com
 
-```sh
-pnpm create astro@latest -- --template minimal
+Personal portfolio and resume site for Braden Kennedy — Backend & Systems Engineer, Mathematics & CS student at Eastern
+Washington University.
+
+Built with [Astro](https://astro.build), deployed to [bradenkennedy.com](https://www.bradenkennedy.com).
+
+---
+
+## Stack
+
+| Layer               | Technology                      |
+|---------------------|---------------------------------|
+| Framework           | [Astro](https://astro.build)    |
+| Interactive islands | [Solid.js](https://solidjs.com) |
+| Package manager     | [pnpm](https://pnpm.io)         |
+| Styling             | Tailwind CSS                    |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org) v18+
+- [pnpm](https://pnpm.io) — install with `npm i -g pnpm`
+
+### Local development
+
+```bash
+# Clone the repository
+git clone https://github.com/bradenk04/portfolio.git
+cd portfolio
+
+# Install dependencies
+pnpm install
+
+# Start the dev server
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The site will be available at `http://localhost:4321`.
 
-## 🚀 Project Structure
+### Build
 
-Inside of your Astro project, you'll see the following folders and files:
+```bash
+# Production build
+pnpm build
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+# Preview the production build locally
+pnpm preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+---
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Contributing
 
-Any static assets, like images, can be placed in the `public/` directory.
+Contributions are welcome — whether that's a bug fix, a typo, or a suggestion. Please read the guidelines below before
+opening a PR.
 
-## 🧞 Commands
+### Commit style
 
-All commands are run from the root of the project, from a terminal:
+This project follows [Conventional Commits](https://www.conventionalcommits.org):
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+| Prefix   | Use for                            |
+|----------|------------------------------------|
+| `feat:`  | New feature or section             |
+| `fix:`   | Bug fix                            |
+| `chore:` | Dependency updates, config changes |
+| `style:` | CSS / visual changes only          |
+| `docs:`  | README or comment updates          |
+| `perf:`  | Performance improvements           |
 
-## 👀 Want to learn more?
+### What not to change
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Personal content (bio, projects, work history) — this is my portfolio, not a template
+- SEO metadata and structured data
+- Domain or deployment configuration
+
+If you're looking to use this as a starting point for your own portfolio, feel free to fork it! Credit would be greatly
+appreciated.
+
+---
+
+## License
+
+The source code is open source under the [MIT License](LICENSE). Personal content (writing, images, project
+descriptions) remains © Braden Kennedy — please don't reproduce it.
