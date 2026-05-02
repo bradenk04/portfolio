@@ -139,6 +139,12 @@
         @apply border-border outline-outline/50;
     }
 
+    ::selection {
+        background: color-mix(in oklch, var(--primary) 35%, transparent);
+        color: var(--foreground);
+    }
+
+
     html {
         scroll-behavior: smooth;
     }
@@ -178,15 +184,44 @@
         transform: scaleX(0);
         transform-origin: right;
         transition: transform var(--transition-smooth);
+        color: var(--accent);
     }
 
     .link-underline:hover {
-        color: var(--accent);
+        color: var(--accent) !important;
     }
 
     .link-underline:hover::after {
         transform: scaleX(1);
         transform-origin: left;
+    }
+
+    .eyebrow {
+        @apply inline-flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-muted-foreground;
+        font-family: var(--font-mono-family), monospace;
+    }
+
+    .eyebrow::before {
+        content: "";
+        width: 2.25rem;
+        height: 1px;
+        background: color-mix(in oklch, var(--primary) 60%, transparent);
+    }
+
+    .tech-tag {
+        @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs;
+        font-family: var(--font-mono-family), monospace;
+        border-color: color-mix(in oklch, var(--primary) 25%, transparent);
+        color: var(--primary-glow);
+        background: color-mix(in oklch, var(--primary) 8%, transparent);
+    }
+
+    .focus-tag {
+        @apply inline-flex items-center rounded-md border px-2.5 py-1 text-xs;
+        font-family: var(--font-mono-family), monospace;
+        border-color: var(--border);
+        color: var(--muted-foreground);
+        background: color-mix(in oklch, var(--secondary) 50%, transparent);
     }
 
 }

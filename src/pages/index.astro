@@ -2,8 +2,44 @@
 import Layout from '@/layouts/Layout.astro';
 import SiteHeader from '@/components/SiteHeader.astro';
 import LatticeBackground from '@/components/solid/LatticeBackground.tsx';
+import SectionHeader from '@/components/SectionHeader.astro';
+import type { Project } from '@/types';
+import ProjectCard from '@/components/ProjectCard.astro';
+import { ArrowUpRight, GitBranch, Mail } from '@lucide/astro';
 
 const year = new Date().getFullYear();
+
+const skills = [
+    {
+        group: 'Languages',
+        items: ['Java', 'Kotlin', 'Astro', 'SolidJS', 'SQL'],
+    },
+    {
+        group: 'Platforms',
+        items: ['Node.js', 'PaperMC', 'PostgreSQL'],
+    },
+    {
+        group: 'Tools',
+        items: ['Git', 'Gradle / Maven', 'Docker', 'Linux'],
+    },
+];
+
+export const projects: Project[] = [
+    {
+        title: 'Custom Items',
+        blurb: 'A PaperMC plugin for defining configurable custom items — abilities, attributes, and behaviors — entirely through config. Built to give server operators expressive power without writing Java.',
+        status: 'Active',
+        tech: ['Java', 'PaperMC', 'TOML'],
+        links: [{ label: 'GitHub', href: 'https://github.com/bradenk04/custom-items' }],
+    },
+    {
+        title: 'Claims',
+        blurb: 'A PaperMC plugin that lets players claim and manage land on a Minecraft server. Designed around clean ownership semantics, fast spatial lookups, and a permission model that scales with the player base.',
+        status: 'Active',
+        tech: ['Kotlin', 'PaperMC', 'Gradle'],
+        links: [{ label: 'GitHub', href: 'https://github.com/bradenk04/claims' }],
+    },
+];
 ---
 
 <Layout>
@@ -35,6 +71,106 @@ const year = new Date().getFullYear();
             >
                 Mathematics & Computer Science · Eastern Washington University.
             </p>
+        </section>
+        <div
+            class="h-px w-full bg-linear-to-r from-transparent via-[color-mix(in_oklch,var(--color-border),transparent_20%)] to-transparent"
+        >
+        </div>
+        <section class="py-16">
+            <SectionHeader id="now" eyebrow="Now" />
+            <p class="text-foreground/85 max-w-2xl text-base leading-relaxed">
+                Expanding two PaperMC plugins into a cohesive toolkit for server operators,
+                exploring better data layers for plugin persistence, and sketching a few smaller
+                side projects in between coursework.
+            </p>
+        </section>
+        <section class="py-16">
+            <SectionHeader id="about" eyebrow="About" title="A short résumé." />
+            <div class="text-foreground/85 space-y-5">
+                <p class="leading-relaxed">
+                    I build backend systems — the parts of software that have to keep working when
+                    nobody's looking. My interests sit at the intersection of clean architecture,
+                    performance, and the kind of correctness that only really clicks once you've
+                    seen a system fail.
+                </p>
+                <p class="leading-relaxed">
+                    I'm currently a student at Eastern Washington University pursuing a double major
+                    in Mathematics and Computer Science. The math half informs how I think about
+                    software: precise definitions, clear invariants, and choosing the right
+                    structure before writing the first line.
+                </p>
+            </div>
+            <div class="mt-10 flex flex-wrap gap-2">
+                <span class="focus-tag">Backend</span>
+                <span class="focus-tag">Systems Architecture</span>
+                <span class="focus-tag">Scalability</span>
+                <span class="focus-tag">Java & Kotlin / JVM</span>
+            </div>
+            <div class="mt-12 grid gap-10 md:grid-cols-2">
+                <div>
+                    <h3 class="text-muted-foreground font-mono text-xs tracking-[0.22em] uppercase">
+                        Education
+                    </h3>
+                    <p class="text-foreground mt-3 font-serif text-lg">
+                        Eastern Washington University
+                    </p>
+                    <p class="text-muted-foreground text-sm">B.S. Mathematics & Computer Science</p>
+                    <p class="text-muted-foreground text-sm">2025-Now</p>
+                </div>
+                <div>
+                    <h3 class="text-muted-foreground font-mono text-xs tracking-[0.22em] uppercase">
+                        Skills
+                    </h3>
+                    <dl class="mt-3 space-y-3">
+                        {
+                            skills.map((s) => (
+                                <div key={s.group} class="grid grid-cols-[7rem_1fr] gap-3">
+                                    <dt class="text-muted-foreground text-sm">{s.group}</dt>
+                                    <dd class="text-foreground/85 text-sm">
+                                        {s.items.join(' · ')}
+                                    </dd>
+                                </div>
+                            ))
+                        }
+                    </dl>
+                </div>
+            </div>
+        </section>
+        <section class="py-16">
+            <SectionHeader id="projects" eyebrow="Projects" title="Things I've built." />
+            <div class="grid gap-5">
+                {projects.map((p) => <ProjectCard project={p} />)}
+            </div>
+            <p class="text-muted-foreground mt-6 font-mono text-xs">// more on the way.</p>
+        </section>
+        <section class="py-16">
+            <SectionHeader id="contact" eyebrow="Contact" title="Get in touch." />
+
+            <p class="text-foreground/85 max-w-xl">
+                Open to interesting backend problems, collaborations, and conversations about
+                systems that have to scale. The fastest way to reach me is email.
+            </p>
+
+            <div class="mt-8 flex flex-col gap-3 text-sm">
+                <a
+                    href={`mailto:braden@bradenkennedy.com`}
+                    class="link-underline text-foreground/90 inline-flex items-center gap-2 font-mono"
+                >
+                    <Mail size={16} class="text-primary-glow" />
+                    braden@bradenkennedy.com
+                </a>
+
+                <a
+                    href="https://github.com/bradenk04/"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="link-underline text-foreground/90 inline-flex items-center gap-2 font-mono"
+                >
+                    <GitBranch size={16} class="text-primary-glow" />
+                    GitHub
+                    <ArrowUpRight size={14} />
+                </a>
+            </div>
         </section>
     </main>
     <footer class="mx-auto max-w-3xl px-6 py-10">
