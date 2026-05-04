@@ -1,0 +1,16 @@
+{
+    "$schema": "../../../../.astro/collections/projects.schema.json",
+    "name": "Custom Items",
+    "tagline": "The all-in-one custom item editor for Minecraft servers",
+    "problem": "Customizing items on a Minecraft server has traditionally required either external plugins with heavy dependencies, manual config editing outside the game, or complicated setup.\nCustom Items strips all of that away — no dependencies to hunt down, no tabbing out, just a drag-and-drop jar that works immediately.",
+    "status": "Active",
+    "stack": ["Java", "PaperMC", "Gradle"],
+    "repository": "https://github.com/bradenk04/custom-items",
+    "links": [
+        {
+            "label": "GitHub",
+            "href": "https://github.com/bradenk04/custom-items"
+        }
+    ],
+    "featured": true
+}
