@@ -5,16 +5,15 @@ import { defineConfig } from 'astro/config';
 import solidJs from '@astrojs/solid-js';
 import sitemap from '@astrojs/sitemap';
 
+import mdx from '@astrojs/mdx';
+
 // https://astro.build/config
 export default defineConfig({
     site: 'https://bradenkennedy.com',
     vite: {
         plugins: [tailwindcss()],
     },
-    integrations: [
-        sitemap(),
-        solidJs({
-            include: ['**/solid/*', '**/node_modules/@suid/material/**'],
-        }),
-    ],
+    integrations: [sitemap(), solidJs({
+        include: ['**/solid/*', '**/node_modules/@suid/material/**'],
+    }), mdx()],
 });

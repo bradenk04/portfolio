@@ -1,0 +1,23 @@
+---
+import { cn } from 'tailwind-variants';
+type Props = {
+    status: 'Active' | 'WIP' | 'Archived';
+};
+
+const { status } = Astro.props;
+
+const styles: Record<'Active' | 'WIP' | 'Archived', string> = {
+    Active: 'border-primary/40 bg-primary/10 text-primary-glow',
+    WIP: 'border-accent/40 bg-accent/10 text-accent',
+    Archived: 'border-border bg-secondary/40 text-muted-foreground',
+};
+---
+
+<span
+    class={cn(
+        'inline-flex items-center rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em]',
+        styles[status]
+    )}
+>
+    {status}
+</span>

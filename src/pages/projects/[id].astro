@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+    const projects = await getCollection('projects');
+    return projects.map((p) => ({
+        params: { id: p.id },
+    }));
+}
+
+const { id } = Astro.params;
+
+import { getEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import LatticeBackground from '@/components/solid/LatticeBackground.tsx';
+import SiteHeader from '@/components/SiteHeader.astro';
+import { ArrowLeft } from '@lucide/astro';
+import StatusBadge from '@/components/projects/StatusBadge.astro';
+
+const project = await getEntry('projects', id);
+
+const markdownFiles = import.meta.glob('/src/content/projects/**/*.mdx');
+
+const getMarkdownPath = (id: string) => `/${project.filePath.replace('index.json', id + '.mdx')}`;
+const getMarkdown = async (id: string) => {
+    const module =
+        getMarkdownPath(id) in markdownFiles ? await markdownFiles[getMarkdownPath(id)]() : null;
+
+    console.log(getMarkdownPath(id));
+    console.log(module);
+
+    if (module == null)
+        return {
+            Content: null,
+            data: null,
+        };
+    const Content = module.Content;
+    const data = module.frontmatter;
+    return {
+        Content,
+        data,
+    };
+};
+
+const { Content: WhatIsItContent, data: whatIsItData } = await getMarkdown('what-is-it');
+---
+
+<Layout>
+    <LatticeBackground client:load />
+    <SiteHeader links={[]} mobileLinks={[]} nameHref="/" />
+    <main class="mx-auto max-w-3xl px-6 py-10">
+        <a
+            href="/projects"
+            class="text-muted-foreground link-underline mb-6 inline-flex items-center gap-1 font-mono text-xs tracking-[0.18em] uppercase"
+        >
+            <ArrowLeft class="h-3 w-3" />
+            All Projects
+        </a>
+        <header class="mb-10">
+            <div class="mb-3 flex items-center gap-3">
+                <StatusBadge status={project.data.status} />
+                <span
+                    class="text-muted-foreground font-mono text-[10px] tracking-[0.18em] uppercase"
+                >
+                    {project.data.stack.splice(0, 2).join(' · ')}
+                </span>
+            </div>
+        </header>
+    </main>
+</Layout>
+
+<h1>{project.data.name}</h1>
+
+{
+    WhatIsItContent && (
+        <div>
+            <h1>What is it</h1>
+            <WhatIsItContent />
+        </div>
+    )
+}

@@ -1,0 +1,9 @@
+{
+    "$schema": "../../../../.astro/collections/projects.schema.json",
+    "name": "Claims",
+    "tagline": "Minecraft claim & land management plugin.",
+    "problem": "Minecraft server operators need a fast, predictable way for players to claim and protect land. Most existing plugins fall apart at the scale of most major networks, leading to every large network having their own iteration of claims plugins. Claims is built to fix this.",
+    "status": "Active",
+    "stack": ["Kotlin", "PaperMC", "Gradle"],
+    "featured": true
+}

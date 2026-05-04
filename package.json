@@ -16,6 +16,7 @@
     "format:check": "prettier --check \"src/**/*.{js,ts,astro,css,md}\""
   },
   "dependencies": {
+    "@astrojs/mdx": "^5.0.4",
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/solid-js": "^6.0.1",
     "@fontsource/inter": "^5.2.8",
