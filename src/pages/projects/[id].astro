@@ -42,7 +42,9 @@ const getMarkdown = async (id: string) => {
     };
 };
 
+const { Content: OverviewContent, data: overviewData } = await getMarkdown('overview');
 const { Content: WhatIsItContent, data: whatIsItData } = await getMarkdown('what-is-it');
+const { Content: WhyItExistsContent, data: whyItExistsData } = await getMarkdown('why-it-exists');
 ---
 
 <Layout>
@@ -62,20 +64,43 @@ const { Content: WhatIsItContent, data: whatIsItData } = await getMarkdown('what
                 <span
                     class="text-muted-foreground font-mono text-[10px] tracking-[0.18em] uppercase"
                 >
-                    {project.data.stack.splice(0, 2).join(' · ')}
+                    {project.data.stack.slice(0, 2).join(' · ')}
                 </span>
             </div>
+            <h1 class="font-serif text-4xl font-medium tracking-tight md:text-5xl">
+                {project.data.name}
+            </h1>
+            <p class="text-muted-foreground mt-3 max-w-2xl text-lg">{project.data.tagline}</p>
         </header>
+        <section class="mb-10">
+            <h2 class="eyebrow mb-4">Tech</h2>
+            <div class="flex flex-wrap gap-1.5">
+                {project.data.stack.map((item) => <span class="tech-tag">{item}</span>)}
+            </div>
+        </section>
+        {
+            overviewData && (
+                <section class="mb-10">
+                    <h2 class="eyebrow mb-4">{overviewData.title}</h2>
+                    <OverviewContent />
+                </section>
+            )
+        }
+        {
+            whatIsItData && (
+                <section class="mb-10">
+                    <h2 class="eyebrow mb-4">{whatIsItData.title}</h2>
+                    <WhatIsItContent />
+                </section>
+            )
+        }
+        {
+            whyItExistsData && (
+                <section class="mb-10">
+                    <h2 class="eyebrow mb-4">{whyItExistsData.title}</h2>
+                    <WhyItExistsContent />
+                </section>
+            )
+        }
     </main>
 </Layout>
-
-<h1>{project.data.name}</h1>
-
-{
-    WhatIsItContent && (
-        <div>
-            <h1>What is it</h1>
-            <WhatIsItContent />
-        </div>
-    )
-}
