@@ -12,6 +12,13 @@ const projects = defineCollection({
         problem: z.string(),
         status: z.enum(['Active', 'WIP', 'Archived']),
         featured: z.boolean().optional(),
+        repository: z.string(),
+        links: z.array(
+            z.object({
+                label: z.string(),
+                href: z.string(),
+            })
+        ),
         stack: z.array(z.string()),
     }),
 });

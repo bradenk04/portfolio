@@ -5,7 +5,8 @@ import LatticeBackground from '@/components/solid/LatticeBackground.tsx';
 import SectionHeader from '@/components/SectionHeader.astro';
 import type { Project } from '@/types';
 import ProjectCard from '@/components/ProjectCard.astro';
-import { ArrowUpRight, GitBranch, Mail } from '@lucide/astro';
+import { ArrowUpRight, GitBranch, Mail, Package } from '@lucide/astro';
+import { getCollection } from 'astro:content';
 
 const year = new Date().getFullYear();
 
@@ -24,22 +25,7 @@ const skills = [
     },
 ];
 
-export const projects: Project[] = [
-    {
-        title: 'Custom Items',
-        blurb: 'A PaperMC plugin for defining configurable custom items — abilities, attributes, and behaviors — entirely through config. Built to give server operators expressive power without writing Java.',
-        status: 'Active',
-        tech: ['Java', 'PaperMC', 'TOML'],
-        links: [{ label: 'GitHub', href: 'https://github.com/bradenk04/custom-items' }],
-    },
-    {
-        title: 'Claims',
-        blurb: 'A PaperMC plugin that lets players claim and manage land on a Minecraft server. Designed around clean ownership semantics, fast spatial lookups, and a permission model that scales with the player base.',
-        status: 'Active',
-        tech: ['Kotlin', 'PaperMC', 'Gradle'],
-        links: [{ label: 'GitHub', href: 'https://github.com/bradenk04/claims' }],
-    },
-];
+const projects = (await getCollection('projects')).filter((p) => p.data.featured == true);
 ---
 
 <Layout>
@@ -139,9 +125,18 @@ export const projects: Project[] = [
         <section class="py-16">
             <SectionHeader id="projects" eyebrow="Projects" title="Things I've built." />
             <div class="grid gap-5">
-                {projects.map((p) => <ProjectCard project={p} />)}
+                {projects.map((p) => <ProjectCard project={p.data} />)}
             </div>
-            <p class="text-muted-foreground mt-6 font-mono text-xs">// more on the way.</p>
+            <p class="text-muted-foreground mt-6 mb-5 font-mono text-xs">// more on the way.</p>
+
+            <!--<a-->
+            <!--    href="/projects"-->
+            <!--    class="link-underline text-foreground/90 inline-flex items-center gap-2 font-mono"-->
+            <!--&gt;-->
+            <!--    <Package size={16} class="text-primary-glow" />-->
+            <!--    View More-->
+            <!--    <ArrowUpRight size={14} />-->
+            <!--</a>-->
         </section>
         <section class="py-16">
             <SectionHeader id="contact" eyebrow="Contact" title="Get in touch." />

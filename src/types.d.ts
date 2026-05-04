@@ -1,7 +1,12 @@
 export type Project = {
-    title: string;
-    blurb: string;
-    status: 'Active' | 'In progress' | 'Maintained' | 'Abandoned';
-    tech: string[];
-    links?: { label: string; href: string }[];
+    name: string;
+    tagline: string;
+    problem: string;
+    status: 'Active' | 'WIP' | 'Archived';
+    featured?: boolean;
+    links: {
+        label: string;
+        href: string;
+    }[];
+    stack: string[];
 };
