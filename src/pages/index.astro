@@ -4,7 +4,7 @@ import SiteHeader from '@/components/SiteHeader.astro';
 import LatticeBackground from '@/components/solid/LatticeBackground.tsx';
 import SectionHeader from '@/components/SectionHeader.astro';
 import type { Project } from '@/types';
-import ProjectCard from '@/components/ProjectCard.astro';
+import ProjectCard from '../components/projects/ProjectCard.astro';
 import { ArrowUpRight, GitBranch, Mail, Package } from '@lucide/astro';
 import { getCollection } from 'astro:content';
 
@@ -125,7 +125,7 @@ const projects = (await getCollection('projects')).filter((p) => p.data.featured
         <section class="py-16">
             <SectionHeader id="projects" eyebrow="Projects" title="Things I've built." />
             <div class="grid gap-5">
-                {projects.map((p) => <ProjectCard project={p.data} />)}
+                {projects.map((p) => <ProjectCard project={p.data} slug={p.data.id} />)}
             </div>
             <p class="text-muted-foreground mt-6 mb-5 font-mono text-xs">// more on the way.</p>
 
