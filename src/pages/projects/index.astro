@@ -1,0 +1,190 @@
+---
+import type { ProjectData } from '@/types';
+import { getCollection } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
+import LatticeBackground from '@/components/solid/LatticeBackground.tsx';
+import SectionHeader from '@/components/SectionHeader.astro';
+import TagFilter from '@/components/projects/TagFilter.astro';
+import ProjectShowcaseCard from '@/components/projects/ProjectShowcaseCards.astro';
+
+const projects = await getCollection('projects');
+
+type CardEntry = { project: ProjectData; span: 'wide' | 'narrow' | 'full' };
+
+function assignSpans(list: ProjectData[]): CardEntry[] {
+    const result: CardEntry[] = [];
+    let i = 0;
+    while (i < list.length) {
+        const p = list[i];
+        if (p.data.featured) {
+            const next = list[i + 1];
+            if (next && !next.data.featured) {
+                result.push({ project: p, span: 'wide' });
+                result.push({ project: next, span: 'narrow' });
+                i += 2;
+                continue;
+            }
+            result.push({ project: p, span: 'full' });
+            i += 1;
+            continue;
+        }
+        const next = list[i + 1];
+        if (next && !next.data.featured) {
+            result.push({ project: p, span: 'narrow' });
+            result.push({ project: next, span: 'narrow' });
+            i += 2;
+        } else {
+            result.push({ project: p, span: 'full' });
+            i += 1;
+        }
+    }
+    return result;
+}
+
+const cards = assignSpans(projects);
+
+const techTags = [...new Set(projects.map((p) => p.data.stack).flat())];
+
+console.log(projects);
+---
+
+<Layout>
+    <LatticeBackground client:load />
+    <SiteHeader links={[]} mobileLinks={[]} nameHref="/" />
+
+    <main class="mx-auto max-w-5xl px-6 py-12">
+        <SectionHeader
+            eyebrow="Projects"
+            title="Things I've built and am building."
+            id="projects-title"
+        />
+        <p class="text-muted-foreground mb-8 max-w-2xl">
+            A working set of systems, plugins, and experiments. Tap a card to dig into the design or
+            read the docs.
+        </p>
+
+        <TagFilter tags={techTags} />
+
+        <p id="empty-state" class="text-muted-foreground hidden font-mono text-sm">
+            // no projects match those filters.
+        </p>
+
+        <div id="project-grid" class="grid grid-cols-1 gap-5 md:grid-cols-6">
+            {
+                cards.map(({ project, span }) => (
+                    <div
+                        data-card
+                        data-stack={JSON.stringify(project.data.stack)}
+                        data-span={span}
+                        class:list={[
+                            span === 'full' && 'md:col-span-6',
+                            span === 'wide' && 'md:col-span-4',
+                            span === 'narrow' && 'md:col-span-2',
+                        ]}
+                    >
+                        <ProjectShowcaseCard project={project} span={span} />
+                    </div>
+                ))
+            }
+        </div>
+    </main>
+
+    <script>
+        const PARAM = 'tag';
+
+        function getSelected(): string[] {
+            const url = new URL(location.href);
+            return url.searchParams.getAll(PARAM);
+        }
+
+        function setSelected(tags: string[]) {
+            const url = new URL(location.href);
+            url.searchParams.delete(PARAM);
+            tags.forEach((t) => url.searchParams.append(PARAM, t));
+            history.replaceState(null, '', url);
+        }
+
+        function applyFilter() {
+            const selected = getSelected();
+            const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-card]'));
+
+            const visible = cards.filter((card) => {
+                if (selected.length === 0) return true;
+                const stack: string[] = JSON.parse(card.dataset.stack ?? '[]');
+                return selected.every((t) => stack.includes(t));
+            });
+
+            const spans = computeSpans(visible);
+            cards.forEach((card) => (card.style.display = 'none'));
+            visible.forEach((card, idx) => {
+                card.style.display = '';
+                setSpan(card, spans[idx]);
+            });
+
+            const emptyState = document.getElementById('empty-state')!;
+            emptyState.classList.toggle('hidden', visible.length > 0);
+        }
+
+        type Span = 'wide' | 'narrow' | 'full';
+
+        function computeSpans(visible: HTMLElement[]): Span[] {
+            const result: Span[] = [];
+            let i = 0;
+            while (i < visible.length) {
+                const span = visible[i].dataset.span as Span;
+                const isFeatured = span === 'wide' || span === 'full';
+                if (isFeatured) {
+                    const next = visible[i + 1];
+                    const nextFeatured =
+                        next && (next.dataset.span === 'wide' || next.dataset.span === 'full');
+                    if (next && !nextFeatured) {
+                        result.push('wide', 'narrow');
+                        i += 2;
+                        continue;
+                    }
+                    result.push('full');
+                    i += 1;
+                    continue;
+                }
+                const next = visible[i + 1];
+                const nextFeatured =
+                    next && (next.dataset.span === 'wide' || next.dataset.span === 'full');
+                if (next && !nextFeatured) {
+                    result.push('narrow', 'narrow');
+                    i += 2;
+                } else {
+                    result.push('full');
+                    i += 1;
+                }
+            }
+            return result;
+        }
+
+        function setSpan(el: HTMLElement, span: Span) {
+            el.classList.remove('md:col-span-6', 'md:col-span-4', 'md:col-span-2');
+            if (span === 'full') el.classList.add('md:col-span-6');
+            if (span === 'wide') el.classList.add('md:col-span-4');
+            if (span === 'narrow') el.classList.add('md:col-span-2');
+        }
+
+        document.addEventListener('tag:toggle', (e: Event) => {
+            const tag = (e as CustomEvent<string>).detail;
+            const selected = getSelected();
+            const next = selected.includes(tag)
+                ? selected.filter((t) => t !== tag)
+                : [...selected, tag];
+            setSelected(next);
+            applyFilter();
+            document.dispatchEvent(new CustomEvent('tag:sync', { detail: getSelected() }));
+        });
+
+        document.addEventListener('tag:clear', () => {
+            setSelected([]);
+            applyFilter();
+            document.dispatchEvent(new CustomEvent('tag:sync', { detail: [] }));
+        });
+        applyFilter();
+        document.dispatchEvent(new CustomEvent('tag:sync', { detail: getSelected() }));
+    </script>
+</Layout>

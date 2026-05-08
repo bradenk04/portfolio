@@ -1,0 +1,90 @@
+---
+import type { ProjectData } from '@/types';
+import { cn } from 'tailwind-variants';
+import StatusBadge from '@/components/projects/StatusBadge.astro';
+import { ArrowUpRight, BookOpen } from '@lucide/astro';
+
+interface Props {
+    project: ProjectData;
+    span?: 'wide' | 'narrow' | 'full';
+}
+
+const classes: Record<NonNullable<Props['span']>, string> = {
+    wide: 'md:col-span-4',
+    narrow: 'md:col-span-2',
+    full: 'md:col-span-6',
+};
+
+const { project, span } = Astro.props;
+---
+
+<article
+    class={cn(
+        'group relative col-span-1 rounded-xl border border-border/70 bg-card/60 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40',
+        classes[span]
+    )}
+    style={{ boxShadow: 'var(--shadow-card)' }}
+>
+    <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ boxShadow: 'var(--shadow-glow)' }}
+    >
+    </div>
+    <div class="relative flex h-full flex-col">
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <a
+                    href={`/projects/${project.id}`}
+                    class="text-foreground hover:text-primary-glow font-serif text-2xl font-medium"
+                >
+                    {project.data.name}
+                </a>
+                <p class="text-muted-foreground mt-1 text-sm">{project.data.tagline}</p>
+            </div>
+            <StatusBadge status={project.data.status} />
+        </div>
+
+        <p class="text-foreground/80 mt-4 text-sm leading-relaxed">
+            {project.data.problem}
+        </p>
+
+        <div class="mt-5 flex flex-wrap gap-1.5">
+            {
+                project.data.stack.map((t) => (
+                    <span key={t} class="tech-tag">
+                        {t}
+                    </span>
+                ))
+            }
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center gap-4 text-sm">
+            {
+                project.data.links.map((l) => (
+                    <a
+                        key={l.label}
+                        href={l.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        class="link-underline text-foreground/80 inline-flex items-center gap-1"
+                    >
+                        {l.label}
+                        <ArrowUpRight class="h-3.5 w-3.5" />
+                    </a>
+                ))
+            }
+            {
+                project.data.hasDocs && (
+                    <Link
+                        to={`/projects/${project.id}/docs`}
+                        class="border-primary/40 bg-primary/10 text-primary-glow hover:bg-primary/20 inline-flex items-center gap-1 rounded-md border px-2.5 py-1 font-mono text-xs transition-colors"
+                    >
+                        <BookOpen class="h-3.5 w-3.5" />
+                        Docs
+                    </Link>
+                )
+            }
+        </div>
+    </div>
+</article>

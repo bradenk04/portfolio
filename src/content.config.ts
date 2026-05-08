@@ -13,6 +13,7 @@ const projects = defineCollection({
         status: z.enum(['Active', 'WIP', 'Archived']),
         featured: z.boolean().optional(),
         repository: z.string(),
+        hasDocs: z.boolean().optional(),
         links: z.array(
             z.object({
                 label: z.string(),

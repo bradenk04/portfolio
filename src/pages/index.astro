@@ -129,14 +129,14 @@ const projects = (await getCollection('projects')).filter((p) => p.data.featured
             </div>
             <p class="text-muted-foreground mt-6 mb-5 font-mono text-xs">// more on the way.</p>
 
-            <!--<a-->
-            <!--    href="/projects"-->
-            <!--    class="link-underline text-foreground/90 inline-flex items-center gap-2 font-mono"-->
-            <!--&gt;-->
-            <!--    <Package size={16} class="text-primary-glow" />-->
-            <!--    View More-->
-            <!--    <ArrowUpRight size={14} />-->
-            <!--</a>-->
+            <a
+                href="/projects"
+                class="link-underline text-foreground/90 inline-flex items-center gap-2 font-mono"
+            >
+                <Package size={16} class="text-primary-glow" />
+                View More
+                <ArrowUpRight size={14} />
+            </a>
         </section>
         <section class="py-16">
             <SectionHeader id="contact" eyebrow="Contact" title="Get in touch." />

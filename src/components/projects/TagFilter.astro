@@ -1,0 +1,66 @@
+---
+interface Props {
+    tags: string[];
+}
+const { tags } = Astro.props;
+---
+
+<div id="tag-filter" class="mb-8 flex flex-wrap items-center gap-2">
+    <span class="text-muted-foreground mr-2 font-mono text-[10px] tracking-[0.18em] uppercase">
+        Filter
+    </span>
+    {
+        tags.map((t) => (
+            <button
+                type="button"
+                data-tag={t}
+                class="tag-btn border-border/70 bg-card/40 text-muted-foreground hover:text-foreground rounded-full border px-2.5 py-0.5 font-mono text-xs transition-colors"
+            >
+                {t}
+            </button>
+        ))
+    }
+    <button
+        type="button"
+        id="clear-btn"
+        class="text-muted-foreground link-underline ml-1 hidden font-mono text-xs"
+    >
+        clear
+    </button>
+</div>
+
+<script>
+    const ACTIVE = 'border-primary/60 bg-primary/15 text-primary-glow';
+    const INACTIVE = 'border-border/70 bg-card/40 text-muted-foreground hover:text-foreground';
+
+    const tagBtns = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
+    const clearBtn = document.getElementById('clear-btn')!;
+
+    function syncUI(selected: string[]) {
+        tagBtns.forEach((btn) => {
+            const active = selected.includes(btn.dataset.tag!);
+            btn.classList.toggle('border-primary/60', active);
+            btn.classList.toggle('bg-primary/15', active);
+            btn.classList.toggle('text-primary-glow', active);
+            btn.classList.toggle('border-border/70', !active);
+            btn.classList.toggle('bg-card/40', !active);
+            btn.classList.toggle('text-muted-foreground', !active);
+            btn.classList.toggle('hover:text-foreground', !active);
+        });
+        clearBtn.classList.toggle('hidden', selected.length === 0);
+    }
+
+    tagBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            document.dispatchEvent(new CustomEvent('tag:toggle', { detail: btn.dataset.tag! }));
+        });
+    });
+
+    clearBtn.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('tag:clear'));
+    });
+
+    document.addEventListener('tag:sync', (e: Event) => {
+        syncUI((e as CustomEvent<string[]>).detail);
+    });
+</script>
