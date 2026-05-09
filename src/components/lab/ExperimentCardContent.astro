@@ -1,0 +1,106 @@
+---
+import type { Experiment } from '@/types';
+import { cn } from 'tailwind-variants';
+import { STATE_META } from '@/content/experiments.ts';
+import { ArrowUpRight, Lock } from '@lucide/astro';
+
+export type Props = {
+    experiment: Experiment;
+};
+
+const { experiment } = Astro.props;
+
+const sealed = experiment.state == 'coming-soon';
+const meta = STATE_META[experiment.state];
+---
+
+<article
+    class={cn(
+        'group relative h-full overflow-hidden rounded-xl border bg-card/60 p-5 transition-all duration-500',
+        sealed ? 'cursor-not-allowed opacity-75' : 'hover:-translate-y-0.5 hover:border-primary/40',
+        meta.ring
+    )}
+>
+    <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 opacity-[0.06]"
+        style={{
+            backgroundImage:
+                'linear-gradient(hsl(var(--primary-glow)) 1px, transpa\n' +
+                'export type Props = {\n' +
+                '    experiment: Experiment;\n' +
+                '};\n' +
+                '\n' +
+                'const { experiment } = Astro.props;rent 1px), linear-gradient(90deg, hsl(var(--primary-glow)) 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+        }}
+    >
+    </div>
+    {
+        !sealed && (
+            <div
+                aria-hidden="true"
+                class="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                style={{ boxShadow: 'var(--shadow-glow)' }}
+            />
+        )
+    }
+    <div class="relative flex h-full flex-col">
+        <div class="flex items-start justify-between gap-3">
+            <div class="text-muted-foreground font-mono text-[10px] tracking-[0.22em] uppercase">
+                {experiment.id} · <span class="text-foreground/70">{experiment.codename}</span>
+            </div>
+            <div
+                class={`flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.18em] ${meta.text}`}
+            >
+                <span class={`h-1.5 w-1.5 rounded-full ${meta.dot}`}></span>
+                {meta.label}
+            </div>
+        </div>
+
+        <h3 class="text-foreground mt-3 font-serif text-xl font-medium">
+            {experiment.title}
+        </h3>
+        <p class="text-muted-foreground mt-2 text-sm leading-relaxed">
+            {experiment.summary}
+        </p>
+
+        <div class="mt-4 flex flex-wrap gap-1.5">
+            {
+                experiment.tags.map((t) => (
+                    <span key={t} class="tech-tag">
+                        {t}
+                    </span>
+                ))
+            }
+        </div>
+        {
+            experiment.readings && (
+                <dl class="border-border/60 mt-4 grid grid-cols-2 gap-2 border-t pt-3 font-mono text-[11px]">
+                    {experiment.readings.map((r) => (
+                        <div class="flex items-center justify-between gap-2">
+                            <dt class="text-muted-foreground">{r.label}</dt>
+                            <dd class="text-foreground/90">{r.value}</dd>
+                        </div>
+                    ))}
+                </dl>
+            )
+        }
+
+        <div class="mt-auto pt-4">
+            {
+                sealed ? (
+                    <span class="text-muted-foreground inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.2em] uppercase">
+                        <Lock class="h-3 w-3" />
+                        specimen sealed
+                    </span>
+                ) : (
+                    <span class="text-foreground/80 group-hover:text-accent inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors">
+                        open specimen
+                        <ArrowUpRight class="h-3 w-3" />
+                    </span>
+                )
+            }
+        </div>
+    </div>
+</article>

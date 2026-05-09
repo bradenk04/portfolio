@@ -1,0 +1,108 @@
+---
+import type { Experiment, ExperimentState } from '@/types';
+import Layout from '@/layouts/Layout.astro';
+import ExperimentCard from '@/components/lab/ExperimentCard.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+import LatticeBackground from '@/components/solid/LatticeBackground.tsx';
+import SiteHeader from '@/components/SiteHeader.astro';
+import { FlaskConical } from '@lucide/astro';
+import { STATE_META } from '@/content/experiments.ts';
+
+const experiments: Experiment[] = [
+    {
+        id: 'EXP-001',
+        codename: 'stat-viewer',
+        title: 'Game Statistic App',
+        summary:
+            'Deep gaming analytics and machine learning insights for the modern competitive player.',
+        tags: ['web', 'app', 'machine-learning'],
+        state: 'coming-soon',
+    },
+    {
+        id: 'EXP-002',
+        codename: 'coming-soon',
+        title: 'Coming Soon',
+        summary: '---redacted---',
+        tags: [],
+        state: 'coming-soon',
+    },
+    {
+        id: 'EXP-003',
+        codename: 'coming-soon',
+        title: 'Coming Soon',
+        summary: '---redacted---',
+        tags: [],
+        state: 'coming-soon',
+    },
+];
+
+const counts = experiments.reduce(
+    (acc, e) => {
+        acc[e.state] = (acc[e.state] ?? 0) + 1;
+        return acc;
+    },
+    {} as Record<ExperimentState, number>
+);
+
+const today = new Date().toISOString().slice(0, 10);
+---
+
+<Layout>
+    <LatticeBackground client:load />
+    <SiteHeader
+        nameHref="/"
+        links={[
+            { href: '/projects', label: 'Projects' },
+            { href: '/lab', label: 'Lab' },
+            { href: '/#contact', label: 'Contact' },
+        ]}
+        mobileLinks={[{ href: '/projects', label: 'projects' }]}
+    />
+    <main class="mx-auto max-w-5xl px-6 py-12">
+        <div
+            class="text-muted-foreground mb-2 flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase"
+        >
+            <FlaskConical className="text-primary-glow h-3.5 w-3.5" />
+            <span>/lab</span>
+            <span class="text-border">·</span>
+            <span>access: visitor</span>
+        </div>
+
+        <SectionHeader
+            eyebrow="The Lab"
+            title="Specimens, sketches & half-formed ideas."
+            id="lab"
+        />
+
+        <p class="text-muted-foreground mb-6 max-w-2xl">
+            A working bench for smaller experiments — things too rough for the projects shelf, too
+            interesting to throw away. Some redirect into the main projects; others are still under
+            glass.
+        </p>
+
+        <div
+            class="border-border/60 bg-card/40 mb-10 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-md border px-4 py-2.5 font-mono text-[11px] tracking-[0.18em] uppercase"
+        >
+            {
+                (Object.keys(STATE_META) as ExperimentState[]).map((s) => {
+                    const m = STATE_META[s];
+                    return (
+                        <div class="flex items-center gap-2">
+                            <span class:list={['h-1.5 w-1.5 rounded-full', m.dot]} />
+                            <span class={m.text}>{m.label}</span>
+                            <span class="text-muted-foreground/70">({counts[s] ?? 0})</span>
+                        </div>
+                    );
+                })
+            }
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {experiments.map((exp) => <ExperimentCard experiment={exp} />)}
+        </div>
+
+        <p class="text-muted-foreground mt-12 font-mono text-xs">
+            // log: {experiments.length} specimens on record · last entry {today}
+        </p>
+    </main>
+</Layout>

@@ -1,0 +1,43 @@
+---
+import type { Experiment } from '@/types';
+import ExperimentCardContent from '@/components/lab/ExperimentCardContent.astro';
+export type Props = {
+    experiment: Experiment;
+};
+
+const { experiment } = Astro.props;
+
+type CardState = 'disabled' | 'external' | 'internal';
+
+const type = ((): CardState => {
+    if (experiment.state === 'coming-soon' || !experiment.href) {
+        return 'disabled';
+    }
+    if (experiment.external) return 'external';
+    return 'internal';
+})();
+---
+
+{
+    type === 'disabled' && (
+        <div aria-disabled={experiment.state === 'coming-soon'}>
+            <ExperimentCardContent experiment={experiment} />
+        </div>
+    )
+}
+
+{
+    type === 'external' && (
+        <a href={experiment.href} rel="noopener noreferrer" target="_blank" class="block h-full">
+            <ExperimentCardContent experiment={experiment} />
+        </a>
+    )
+}
+
+{
+    type === 'internal' && (
+        <a href={experiment.href} class="block h-full">
+            <ExperimentCardContent experiment={experiment} />
+        </a>
+    )
+}
